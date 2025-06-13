@@ -13,3 +13,5 @@ logs
 npm-debug.log*
 .vscode
 .idea
+# macOS junk files
+.DS_Store

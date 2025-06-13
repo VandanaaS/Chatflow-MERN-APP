@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
-const socket = io('http://localhost:5000');
+const API_URL = process.env.REACT_APP_API_URL;
+const socket = io(API_URL);
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -15,7 +15,7 @@ export default function Chat() {
     const token = localStorage.getItem('token');
     if (!token) return window.location.href = '/login';
 
-    axios.get('http://localhost:5000/conversations', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_URL}/conversations`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         if (res.data.length > 0) {
           setConversationId(res.data[0]._id);
@@ -34,15 +34,15 @@ export default function Chat() {
   }, []);
 
   const loadMessages = async (convId) => {
-    const res = await axios.get(`http://localhost:5000/conversations/${convId}/messages`);
+    const res = await axios.get(`${API_URL}/conversations/${convId}/messages`);
     setMessages(res.data);
   };
 
   const sendMessage = async () => {
     const token = localStorage.getItem('token');
-    const resUser = await axios.get('http://localhost:5000/users/me', { headers: { Authorization: `Bearer ${token}` } });
+    const resUser = await axios.get(`${API_URL}/users/me`, { headers: { Authorization: `Bearer ${token}` } });
     const newMsg = { senderId: resUser.data._id, content: text };
-    const res = await axios.post(`http://localhost:5000/conversations/${conversationId}/messages`, newMsg);
+    const res = await axios.post(`${API_URL}/conversations/${conversationId}/messages`, newMsg);
     socket.emit('sendMessage', res.data);
     setText('');
   };

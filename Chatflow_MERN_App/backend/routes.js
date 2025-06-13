@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const { User, Conversation, Message } = require('./models');
 const router = express.Router();
 
+// Middleware to regster a new user
 router.post('/auth/register', async (req, res) => {
   try {
     const user = new User(req.body);
@@ -15,6 +16,7 @@ router.post('/auth/register', async (req, res) => {
   }
 });
 
+// Middleware to login
 router.post('/auth/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });

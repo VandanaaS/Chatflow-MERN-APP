@@ -1,7 +1,9 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from 'react-toastify';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Register() {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
@@ -13,10 +15,11 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/auth/register', form);
+      await axios.post(`${API_URL}/auth/register`, form);
+      toast.success("Registered successfully!");
       window.location.href = '/login';
     } catch (err) {
-      alert('Registration failed');
+      toast.error("Registration failed!");
     }
   };
 

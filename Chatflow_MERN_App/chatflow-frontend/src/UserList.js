@@ -1,13 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from 'react-toastify';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:5000/users', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_URL}/users`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setUsers(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -15,13 +18,13 @@ export default function UserList() {
   const startConversation = async (userId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.post('http://localhost:5000/conversations', 
+      await axios.post(`${API_URL}/conversations`, 
         { participants: [userId] }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
       window.location.href = '/';
     } catch (err) {
-      alert('Failed to start conversation');
+      toast.error('Failed to start conversation');
     }
   };
 

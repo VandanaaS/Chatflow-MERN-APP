@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from 'react-toastify';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -11,11 +13,11 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/auth/login', { email, password });
+      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
       localStorage.setItem('token', res.data.token);
       window.location.href = '/users';
     } catch (err) {
-      alert('Login failed');
+      toast.error("Login failed!");
     }
   };
 
